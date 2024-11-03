@@ -7,6 +7,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - .:/var/www/html
+            - ./database:/var/www/database
         ports:
             - "9000:9000"
         networks:
@@ -18,7 +19,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - .:/var/www/html
-        command: php artisan queue:work --queue events --sleep 5 --tries 2
+        command: sh -c "php artisan queue:work --queue events --sleep 5 --tries 2"
         restart: on-failure
         depends_on:
             - app
