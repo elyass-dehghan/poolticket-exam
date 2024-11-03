@@ -26,6 +26,9 @@ COPY . .
 # Install Laravel dependencies
 RUN composer install --no-interaction
 
+RUN php artisan config:cache
+RUN php artisan route:cache
+
 # Expose port 9000
 EXPOSE 9000
 

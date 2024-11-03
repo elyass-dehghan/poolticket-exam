@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Event;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 
 class MysqlEventRepository implements EventRepositoryContract
 {
@@ -26,8 +28,24 @@ class MysqlEventRepository implements EventRepositoryContract
         return false;
     }
 
-    public function getPaginated(): array
+    /**
+     * @throws Exception
+     */
+    public function getPaginated(?string $from, ?int $userId): CursorPaginator|false
     {
-        // TODO: Implement getPaginated() method.
+        try {
+            $query = DB::table('events');
+
+            if ($from !== null)
+                $query->where('created_at', '>=', $from);
+            if ($userId !== null)
+                $query->where('user_id', $userId);
+
+            return $query->orderBy('id', 'desc')->cursorPaginate(2);
+        } catch (Exception $exception) {
+            // capture exception
+        }
+
+        return false;
     }
 }

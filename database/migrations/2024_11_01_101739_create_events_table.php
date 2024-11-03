@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->index();
+            $table->string('name', 100);
             $table->foreignId('user_id')->index();
             $table->json('payload')->nullable();
             $table->timestamps();
+
+            $table->index(['user_id', 'created_at'], 'composite_index_on_user_id_and_created_at');
 
             // Here must set foreign relation.
             /*$table->foreign('user_id')
